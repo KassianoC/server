@@ -5,5 +5,6 @@ import { PersonalizationsController } from './personalizations.controller';
 @Module({
   controllers: [PersonalizationsController],
   providers: [PersonalizationsService],
+  exports: [PersonalizationsService],
 })
 export class PersonalizationsModule {}

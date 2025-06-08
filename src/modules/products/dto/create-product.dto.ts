@@ -7,7 +7,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Language } from 'src/common/enums/language.enum';
+import { Language } from '../../../common/enums/language.enum';
 
 export class CreateProductDto {
   @IsOptional()

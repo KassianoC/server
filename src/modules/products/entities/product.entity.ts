@@ -1,4 +1,4 @@
-import { Language } from 'src/common/enums/language.enum';
+import { Language } from '../../../common/enums/language.enum';
 import {
   Column,
   Entity,
@@ -13,7 +13,7 @@ export class Product {
   id: string;
 
   @Column({ type: 'uuid', nullable: true })
-  client_id: string;
+  client_id: string | null;
 
   @Column({ type: 'boolean', default: false })
   product_type: boolean; // true para livros
@@ -22,43 +22,48 @@ export class Product {
   title: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description: string | null;
 
-  @Column({ type: 'enum', enum: Language, default: Language.EN })
+  @Column({
+    type: 'enum',
+    enum: Language,
+    default: Language.EN,
+    nullable: false,
+  })
   language: Language;
 
-  @Column({ nullable: true })
-  preview_url: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  preview_url: string | null;
 
-  @Column('text', { array: true, nullable: true })
+  @Column('json', { nullable: true })
   images: string[];
 
-  @Column({ nullable: true })
-  image_example: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image_example: string | null;
 
-  @Column({ nullable: true })
-  cover_image: string;
-
-  @Column({ type: 'float', nullable: true })
-  height: number;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  cover_image: string | null;
 
   @Column({ type: 'float', nullable: true })
-  width: number;
+  height: number | null;
 
   @Column({ type: 'float', nullable: true })
-  length: number;
+  width: number | null;
 
   @Column({ type: 'float', nullable: true })
-  weight: number;
+  length: number | null;
 
-  @Column({ nullable: true })
-  book_format: string;
+  @Column({ type: 'float', nullable: true })
+  weight: number | null;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  book_format: string | null;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
   price: number;
 
-  @Column({ nullable: true })
-  bar_code: string;
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  bar_code: string | null;
 
   @CreateDateColumn()
   created_at: Date;

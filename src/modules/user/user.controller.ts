@@ -1,15 +1,34 @@
-import { Controller, Post, Body, Param, Get, Patch, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Put,
+  Param,
+  Body,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { putPasswordDto } from './dto/put-password.dto';
+import { PutPasswordDto } from './dto/put-password.dto'; // Corrigido o nome do DTO para seguir convenção
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create')
-  async create(@Body() createUserDto: CreateUserDto) {
-    await this.userService.create(createUserDto);
+  @UseInterceptors(FileInterceptor('photo')) // Intercepta o campo 'photo' como arquivo
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: CreateUserDto,
+  ) {
+    console.log('Dados recebidos no body:', body);
+    console.log('Arquivo recebido:', file);
+
+    // Passa os dados e o arquivo para o serviço
+    await this.userService.create(body, file);
     return { message: 'Usuário criado com sucesso' };
   }
 
@@ -19,17 +38,26 @@ export class UserController {
     return this.userService.findOne(userId);
   }
 
-  @Patch('patch/:id')
-  async update(@Param('id') id: string, @Body() updateUserDto: CreateUserDto) {
+  @Patch('patch/:id') // Mantém o endpoint consistente com o frontend
+  @UseInterceptors(FileInterceptor('photo')) // Intercepta o campo 'photo' como arquivo
+  async update(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() updateUserDto: CreateUserDto,
+  ) {
     const userId = parseInt(id);
-    await this.userService.update(userId, updateUserDto);
+    console.log('Dados recebidos no body:', updateUserDto);
+    console.log('Arquivo recebido:', file);
+
+    // Passa os dados e o arquivo para o serviço
+    await this.userService.update(userId, updateUserDto, file);
     return { message: 'Usuário atualizado com sucesso' };
   }
 
   @Put('putpassword/:id')
   async putPassword(
     @Param('id') id: string,
-    @Body() putPasswordDto: putPasswordDto,
+    @Body() putPasswordDto: PutPasswordDto,
   ) {
     const userId = parseInt(id);
     await this.userService.putPassword(userId, putPasswordDto.password);

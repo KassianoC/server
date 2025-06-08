@@ -13,4 +13,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   migrations: [__dirname + '/migration/*{.ts,.js}'],
+
+  logging: ['error', 'query'], // mostra queries e erros
+  logger: 'advanced-console',
 };

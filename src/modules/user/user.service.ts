@@ -19,6 +19,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
     const existingEmail = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     });
@@ -80,5 +81,9 @@ export class UserService {
 
     await this.userRepository.save(user);
     return user;
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
   }
 }
