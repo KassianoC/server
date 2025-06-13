@@ -15,9 +15,9 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const product = this.productRepository.create({
       ...createProductDto,
-      images: Array.isArray(createProductDto.images)
-        ? createProductDto.images.join(',')
-        : createProductDto.images,
+      // images: Array.isArray(createProductDto.images)
+      //   ? createProductDto.images.join(',')
+      //   : createProductDto.images,
     });
     return this.productRepository.save(product);
   }
