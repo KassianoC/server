@@ -93,7 +93,7 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @Column()
+  @Column({ nullable: true })
   @IsOptional()
-  personalizations: number;
+  personalizations?: number;
 }
