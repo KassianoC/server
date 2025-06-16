@@ -94,5 +94,6 @@ export class User {
   updated_at: Date;
 
   @Column()
+  @IsOptional()
   personalizations: number;
 }
