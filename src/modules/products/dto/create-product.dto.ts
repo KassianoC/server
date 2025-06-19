@@ -1,6 +1,5 @@
 import {
   IsArray,
-  IsBoolean,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -14,8 +13,9 @@ export class CreateProductDto {
   @IsString()
   client_id?: string;
 
-  @IsBoolean()
-  product_type: boolean;
+  @IsNotEmpty()
+  @IsString()
+  product_type: string;
 
   @IsNotEmpty()
   @IsString()

@@ -21,6 +21,13 @@ export class OrdersService {
     return this.orderRepository.find({ relations: ['user'] });
   }
 
+  async findAllByUsers(user_id: string): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { user_id },
+      relations: ['user'],
+    });
+  }
+
   async findOne(id: string): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: { id },

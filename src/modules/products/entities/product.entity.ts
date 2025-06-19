@@ -15,8 +15,8 @@ export class Product {
   @Column({ type: 'uuid', nullable: true })
   client_id: string | null;
 
-  @Column({ type: 'boolean', default: false })
-  product_type: boolean; // true para livros
+  @Column({ type: 'varchar', length: 50, default: 'default', nullable: false })
+  product_type: string; // exemplo: 'livro', 'revista', etc.
 
   @Column()
   title: string;

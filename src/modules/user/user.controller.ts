@@ -33,6 +33,11 @@ export class UserController {
     return { message: 'Usuário criado com sucesso' };
   }
 
+  @Get('get')
+  async findAll() {
+    return this.userService.findAll();
+  }
+
   @Get('get/:id')
   async findOne(@Param('id') id: string) {
     const userId = parseInt(id);

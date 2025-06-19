@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { ReturnUserDto } from './dto/retorn-user.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
+import { UserRole } from '../../common/enums/user-role.enum';
 
 @Injectable()
 export class UserService {
@@ -46,6 +47,13 @@ export class UserService {
     }
 
     return new ReturnUserDto(user);
+  }
+
+  async findAll(): Promise<ReturnUserDto[]> {
+    const users = await this.userRepository.find({
+      where: { role: UserRole.USER },
+    });
+    return users.map(user => new ReturnUserDto(user));
   }
 
   async update(id: number, updateUserDto: PatchUserDto): Promise<User> {
