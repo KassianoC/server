@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { PaymentStatus } from '../../../common/enums/payment-status.enum';
 import { DeliveryStatus } from '../../../common/enums/delivery-status.enum';
+import { CreateOrderItemDto } from 'src/modules/order-items/dto/create-order-item.dto';
 
 export class CreateOrderDto {
   @IsUUID()
@@ -58,4 +59,8 @@ export class CreateOrderDto {
   @IsOptional()
   @IsString()
   graphic_company?: string;
+
+  @IsOptional()
+  @IsString()
+  items: CreateOrderItemDto[];
 }

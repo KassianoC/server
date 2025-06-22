@@ -13,20 +13,21 @@ export class OrderItemsService {
   ) {}
 
   async create(createOrderItemDto: CreateOrderItemDto): Promise<OrderItem> {
+    // Verificar se o order_id existe (opcional, dependendo da lógica)
     const orderItem = this.orderItemRepository.create(createOrderItemDto);
     return this.orderItemRepository.save(orderItem);
   }
 
   async findAll(): Promise<OrderItem[]> {
     return this.orderItemRepository.find({
-      relations: ['user', 'order', 'personalization'],
+      relations: ['order'], // Removido 'user' e 'personalization' se não forem necessários
     });
   }
 
   async findOne(id: string): Promise<OrderItem> {
     const orderItem = await this.orderItemRepository.findOne({
       where: { id },
-      relations: ['user', 'order', 'personalization'],
+      relations: ['order'], // Removido 'user' e 'personalization' se não forem necessários
     });
     if (!orderItem) {
       throw new NotFoundException(`OrderItem with ID ${id} not found`);

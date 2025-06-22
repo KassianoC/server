@@ -4,17 +4,42 @@ import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
+import { OrderItem } from '../order-items/entities/order-item.entity';
+import { ReturnUserDto } from '../user/dto/retorn-user.dto';
+import { UserService } from '../user/user.service';
+import { Language } from '../../common/enums/language.enum';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
+    private readonly userService: UserService, // Injeta UserService
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    console.log(createOrderDto);
     const order = this.orderRepository.create(createOrderDto);
-    return this.orderRepository.save(order);
+
+    // Corrige UserService para userService
+    const user: ReturnUserDto = await this.userService.findOne(
+      Number(createOrderDto.user_id),
+    );
+
+    const savedOrder = await this.orderRepository.save(order);
+
+    const orderItems = createOrderDto.items.map(item => ({
+      ...item,
+      user_id: createOrderDto.user_id,
+      order_id: savedOrder.id,
+      language: user.language as Language,
+    }));
+
+    await this.orderRepository.manager
+      .getRepository(OrderItem)
+      .save(orderItems);
+
+    return savedOrder;
   }
 
   async findAll(): Promise<Order[]> {
