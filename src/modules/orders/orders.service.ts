@@ -66,7 +66,7 @@ export class OrdersService {
   }
 
   async findAll(): Promise<Order[]> {
-    return this.orderRepository.find({ relations: ['user'] });
+    return this.orderRepository.find({ relations: ['user', 'items'] });
   }
 
   async findAllByUsers(user_id: number): Promise<Order[]> {
