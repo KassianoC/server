@@ -1,27 +1,19 @@
 import {
-  IsArray,
-  IsEnum,
   IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
   IsString,
-  IsUUID,
+  IsNumber,
+  IsEnum,
+  IsOptional,
+  IsArray,
 } from 'class-validator';
 import { Language } from '../../../common/enums/language.enum';
 
 export class CreateOrderItemDto {
-  @IsUUID()
-  user_id: string;
-
-  @IsUUID()
-  order_id: string;
+  @IsOptional()
+  @IsInt()
+  personalization_id?: number;
 
   @IsOptional()
-  @IsUUID()
-  personalization_id?: string;
-
-  @IsNotEmpty()
   @IsString()
   book_title: string;
 
@@ -34,14 +26,13 @@ export class CreateOrderItemDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
   images?: string[];
 
-  @IsInt()
-  @IsNotEmpty()
+  @IsOptional()
+  @IsNumber()
   quantity: number;
 
+  @IsOptional()
   @IsNumber()
-  @IsNotEmpty()
   price: number;
 }

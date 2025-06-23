@@ -4,15 +4,18 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
+  ValidateNested,
+  IsArray,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { PaymentStatus } from '../../../common/enums/payment-status.enum';
 import { DeliveryStatus } from '../../../common/enums/delivery-status.enum';
-import { CreateOrderItemDto } from 'src/modules/order-items/dto/create-order-item.dto';
+import { CreateOrderItemDto } from '../../order-items/dto/create-order-item.dto';
 
 export class CreateOrderDto {
-  @IsUUID()
-  user_id: string;
+  @IsNotEmpty()
+  @IsString()
+  user_id: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -60,7 +63,8 @@ export class CreateOrderDto {
   @IsString()
   graphic_company?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateOrderItemDto)
   items: CreateOrderItemDto[];
 }

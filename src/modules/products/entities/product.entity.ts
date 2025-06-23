@@ -9,10 +9,10 @@ import {
 
 @Entity('products')
 export class Product {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ nullable: true })
   client_id: string | null;
 
   @Column({ type: 'varchar', length: 50, default: 'default', nullable: false })

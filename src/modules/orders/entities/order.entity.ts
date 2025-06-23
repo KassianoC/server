@@ -4,23 +4,28 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { PaymentStatus } from '../../../common/enums/payment-status.enum';
 import { DeliveryStatus } from '../../../common/enums/delivery-status.enum';
 import { User } from '../../../modules/user/entities/user.entity';
+import { OrderItem } from '../../../modules/order-items/entities/order-item.entity';
 
 @Entity('orders')
 export class Order {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ type: 'uuid' })
-  user_id: string;
+  @Column()
+  user_id: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => OrderItem, item => item.order, { cascade: true })
+  items: OrderItem[];
 
   @Column({ type: 'float' })
   total_amount: number;

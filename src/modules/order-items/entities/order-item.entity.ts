@@ -13,25 +13,25 @@ import { Personalizations } from '../../../modules/personalizations/entities/per
 
 @Entity('order_items')
 export class OrderItem {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ type: 'uuid' })
+  @Column()
   user_id: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ type: 'uuid' })
+  @Column()
   order_id: string;
 
   @ManyToOne(() => Order, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
-  @Column({ type: 'uuid', nullable: true })
-  personalization_id: string;
+  @Column({ nullable: true })
+  personalization_id: number;
 
   @ManyToOne(() => Personalizations, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'personalization_id' })

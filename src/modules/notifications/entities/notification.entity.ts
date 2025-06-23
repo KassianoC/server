@@ -10,11 +10,11 @@ import { User } from '../../user/entities/user.entity';
 
 @Entity('notifications')
 export class Notification {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ type: 'uuid' })
-  user_id: string;
+  @Column()
+  user_id: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })

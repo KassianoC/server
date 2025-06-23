@@ -1,8 +1,8 @@
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { NotificationType } from '../../../common/enums/notification-type.enum';
 
 export class CreateNotificationDto {
-  @IsUUID()
+  @IsNotEmpty()
   user_id: string;
 
   @IsEnum(NotificationType)

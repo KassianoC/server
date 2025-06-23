@@ -26,7 +26,7 @@ export class OrdersController {
   }
 
   @Get('user/:user_id')
-  findAllByUsers(@Param('user_id') user_id: string) {
+  findAllByUsers(@Param('user_id') user_id: number) {
     return this.ordersService.findAllByUsers(user_id);
   }
 
