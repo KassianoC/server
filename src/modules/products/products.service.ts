@@ -26,7 +26,7 @@ export class ProductsService {
     return this.productRepository.find();
   }
 
-  async findOne(id: string): Promise<Product> {
+  async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
@@ -35,7 +35,7 @@ export class ProductsService {
   }
 
   async update(
-    id: string,
+    id: number,
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
     const product = await this.findOne(id);
@@ -43,7 +43,7 @@ export class ProductsService {
     return this.productRepository.save(product);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const product = await this.findOne(id);
     await this.productRepository.remove(product);
   }
