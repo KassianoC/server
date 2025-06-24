@@ -16,8 +16,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  async create(@Body() createProductDto: CreateProductDto) {
-    await this.productsService.create(createProductDto);
+  create(@Body() createProductDto: CreateProductDto) {
+    this.productsService.create(createProductDto);
     return { message: 'Produto criado com sucesso' };
   }
 
@@ -33,7 +33,8 @@ export class ProductsController {
 
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(id, updateProductDto);
+    this.productsService.update(id, updateProductDto);
+    return { message: 'Produto alterado com sucesso' };
   }
 
   @Delete(':id')
