@@ -38,6 +38,9 @@ export class Product {
   @Column('json', { nullable: true })
   images: string[];
 
+  @Column({ type: 'boolean', default: false, nullable: false })
+  del: boolean;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   image_example: string | null;
 
