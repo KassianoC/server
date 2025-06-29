@@ -13,6 +13,7 @@ export class ProductsService {
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
+    console.log('Creating product with data:', createProductDto);
     const product = this.productRepository.create({
       ...createProductDto,
       // images: Array.isArray(createProductDto.images)
@@ -28,6 +29,7 @@ export class ProductsService {
 
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id } });
+    console.log(product);
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
@@ -38,9 +40,13 @@ export class ProductsService {
     id: number,
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
+    console.log('Updating product with ID:', id);
+    console.log('With data:', updateProductDto);
     const product = await this.findOne(id);
     Object.assign(product, updateProductDto);
-    return this.productRepository.save(product);
+    const savedProduct = await this.productRepository.save(product);
+    console.log('Saved product:', savedProduct);
+    return savedProduct;
   }
 
   async remove(id: number): Promise<void> {
