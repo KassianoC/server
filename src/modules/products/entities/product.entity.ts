@@ -62,6 +62,9 @@ export class Product {
   @Column({ type: 'varchar', length: 50, nullable: true })
   book_format: string | null;
 
+  @Column({ type: 'int', nullable: true })
+  pages: number | null;
+
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
   price: number;
 

@@ -62,6 +62,10 @@ export class CreateProductDto {
   weight?: number;
 
   @IsOptional()
+  @IsNumber()
+  pages?: number;
+
+  @IsOptional()
   @IsString()
   book_format?: string;
 
