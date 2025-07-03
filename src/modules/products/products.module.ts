@@ -12,10 +12,9 @@ import { Product } from './entities/product.entity';
     TypeOrmModule.forFeature([Product]),
     MulterModule.register({
       storage: diskStorage({
-        destination: './uploads/images',
+        destination: './public/uploads/products', // Alinha com o serviço
         filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
           cb(
             null,
             `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`,
@@ -23,8 +22,11 @@ import { Product } from './entities/product.entity';
         },
       }),
       fileFilter: (req, file, cb) => {
-        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
-          return cb(new Error('Apenas JPG, JPEG ou PNG são permitidos'), false);
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+          return cb(
+            new Error('Apenas JPG, JPEG, PNG ou GIF são permitidos'),
+            false,
+          );
         }
         cb(null, true);
       },

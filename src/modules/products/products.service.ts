@@ -4,22 +4,48 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class ProductsService {
+  private readonly uploadDir = path.join(
+    __dirname,
+    '../../../public/uploads/products',
+  );
+
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-  ) {}
+  ) {
+    //Criar pasta de uploads se não existir
+    if (!fs.existsSync(this.uploadDir)) {
+      fs.mkdirSync(this.uploadDir, { recursive: true });
+    }
+  }
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  async create(
+    createProductDto: CreateProductDto,
+    files: {
+      image_example?: Express.Multer.File;
+      cover_image?: Express.Multer.File;
+      page_images?: Express.Multer.File[];
+    },
+  ): Promise<Product> {
     console.log('Creating product with data:', createProductDto);
+    console.log('Files received:', files);
+
+    const imageName = files.image_example?.filename ?? null;
+    const coverImageName = files.cover_image?.filename ?? null;
+    const pageImagesNames = files.page_images?.map(file => file.filename) ?? [];
+
     const product = this.productRepository.create({
       ...createProductDto,
-      // images: Array.isArray(createProductDto.images)
-      //   ? createProductDto.images.join(',')
-      //   : createProductDto.images,
+      image_example: imageName,
+      cover_image: coverImageName,
+      page_images: pageImagesNames,
     });
+
     return this.productRepository.save(product);
   }
 
@@ -29,7 +55,6 @@ export class ProductsService {
 
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id } });
-    console.log(product);
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
@@ -39,11 +64,32 @@ export class ProductsService {
   async update(
     id: number,
     updateProductDto: UpdateProductDto,
+    files: {
+      image_example?: Express.Multer.File;
+      cover_image?: Express.Multer.File;
+      page_images?: Express.Multer.File[];
+    },
   ): Promise<Product> {
     console.log('Updating product with ID:', id);
     console.log('With data:', updateProductDto);
+    console.log('Files received:', files);
+
     const product = await this.findOne(id);
-    Object.assign(product, updateProductDto);
+
+    const imageExample = files.image_example?.filename ?? product.image_example;
+    const coverImageName = files.cover_image?.filename ?? product.cover_image;
+    const pageImagesNames =
+      files.page_images?.map(file => file.filename) ??
+      product.page_images ??
+      [];
+
+    Object.assign(product, {
+      ...updateProductDto,
+      image_example: imageExample,
+      cover_image: coverImageName,
+      page_images: pageImagesNames,
+    });
+
     const savedProduct = await this.productRepository.save(product);
     console.log('Saved product:', savedProduct);
     return savedProduct;
@@ -55,65 +101,3 @@ export class ProductsService {
     await this.productRepository.save(product);
   }
 }
-
-// teste depos img //
-
-// import { Injectable, NotFoundException } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// import { Product } from './entities/product.entity';
-// import { CreateProductDto } from './dto/create-product.dto';
-// import { UpdateProductDto } from './dto/update-product.dto';
-
-// @Injectable()
-// export class ProductsService {
-//   constructor(
-//     @InjectRepository(Product)
-//     private readonly productRepository: Repository<Product>,
-//   ) {}
-
-//   async create(
-//     productData: CreateProductDto & {
-//       images: string[];
-//       image_example: string;
-//       cover_image: string;
-//     },
-//   ) {
-//     const product = this.productRepository.create(productData);
-//     return this.productRepository.save(product);
-//   }
-
-//   async findAll() {
-//     return this.productRepository.find();
-//   }
-
-//   async findOne(id: string) {
-//     const product = await this.productRepository.findOne({ where: { id } });
-//     if (!product) {
-//       throw new NotFoundException(`Produto com ID ${id} não encontrado`);
-//     }
-//     return product;
-//   }
-
-//   async update(
-//     id: string,
-//     updateProductDto: UpdateProductDto & {
-//       images?: string[];
-//       image_example?: string;
-//       cover_image?: string;
-//     },
-//   ) {
-//     const product = await this.findOne(id); // Reusa findOne para validar existência
-//     const updatedProduct = this.productRepository.merge(
-//       product,
-//       updateProductDto,
-//     );
-//     return this.productRepository.save(updatedProduct);
-//   }
-
-//   async remove(id: string) {
-//     const product = await this.findOne(id); // Valida existência antes de remover
-//     await this.productRepository.remove(product);
-//     return { message: `Produto com ID ${id} removido com sucesso` };
-//   }
-// }

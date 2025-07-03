@@ -33,19 +33,16 @@ export class Product {
   language: Language;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  preview_url: string | null;
-
-  @Column('json', { nullable: true })
-  images: string[];
+  image_example: string | null; // Imagem principal
 
   @Column({ type: 'boolean', default: false, nullable: false })
   del: boolean;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  image_example: string | null;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
   cover_image: string | null;
+
+  @Column('simple-array', { nullable: true }) // Array para imagens de páginas
+  page_images: string[];
 
   @Column({ type: 'float', nullable: true })
   height: number | null;
