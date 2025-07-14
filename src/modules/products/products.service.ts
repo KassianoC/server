@@ -78,10 +78,27 @@ export class ProductsService {
 
     const imageExample = files.image_example?.filename ?? product.image_example;
     const coverImageName = files.cover_image?.filename ?? product.cover_image;
-    const pageImagesNames =
-      files.page_images?.map(file => file.filename) ??
-      product.page_images ??
-      [];
+
+    // Atualiza page_images substituindo pelo índice correto, não apenas acrescentando
+    let pageImagesNames: string[] = Array.isArray(product.page_images)
+      ? [...product.page_images]
+      : [];
+
+    if (files.page_images && files.page_images.length > 0) {
+      files.page_images.forEach(file => {
+        // Extrai o índice do nome do campo (ex: page_images[2])
+        const match = file.fieldname.match(/page_images\[(\d+)\]/);
+        if (match) {
+          const idx = parseInt(match[1], 10);
+          pageImagesNames[idx] = file.filename;
+        } else {
+          // Se não tiver índice, adiciona ao final
+          pageImagesNames.push(file.filename);
+        }
+      });
+      // Remove possíveis "buracos" (undefined) se algum índice não foi enviado
+      pageImagesNames = pageImagesNames.filter(Boolean);
+    }
 
     Object.assign(product, {
       ...updateProductDto,
