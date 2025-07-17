@@ -1,3 +1,4 @@
+import { Personalizations } from '../../personalizations/entities/personalization.entity';
 import { Language } from '../../../common/enums/language.enum';
 import {
   Column,
@@ -73,4 +74,5 @@ export class Product {
 
   @UpdateDateColumn()
   updated_at: Date;
+  personalizations: Personalizations[];
 }
