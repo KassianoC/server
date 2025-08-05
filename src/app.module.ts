@@ -8,6 +8,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { OrderItemsModule } from './modules/order-items/order-items.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { CheckoutModule } from './modules/checkout/checkout.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     AuthModule,
     OrderItemsModule,
     NotificationsModule,
+    CheckoutModule,
   ],
 })
 export class AppModule {}
