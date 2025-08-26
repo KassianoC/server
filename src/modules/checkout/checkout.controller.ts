@@ -1,7 +1,19 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { CheckoutService } from './checkout.service';
 
-@Controller('checkout')
+@Controller('payment')
 export class CheckoutController {
-  constructor(private readonly checkoutService: CheckoutService) {}
+  constructor(private stripeService: CheckoutService) {}
+
+  @Post('create-checkout-session')
+  async createCheckoutSession(
+    @Body() body: { amount: number; currency: string },
+  ) {
+    const { amount, currency } = body;
+    const url = await this.stripeService.createCheckoutSession(
+      amount,
+      currency,
+    );
+    return { url };
+  }
 }

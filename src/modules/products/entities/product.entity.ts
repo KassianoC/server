@@ -49,6 +49,9 @@ export class Product {
   height: number | null;
 
   @Column({ type: 'float', nullable: true })
+  product_grapy_id: string | null;
+
+  @Column({ type: 'float', nullable: true })
   width: number | null;
 
   @Column({ type: 'float', nullable: true })
